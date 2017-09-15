@@ -40,287 +40,315 @@ if ! exists('g:vimified_packages')
 endif
 " }}}
 
-" VUNDLE {{{
-let s:bundle_path=s:dotvim."/bundle/"
-execute "set rtp+=".s:bundle_path."vundle/"
-call vundle#rc(s:bundle_path)
-
-Bundle 'gmarik/vundle'
-" }}}
-
-" PACKAGES {{{
-
-" Install user-supplied Bundles {{{
-let s:extrarc = expand(s:dotvim . '/extra.vimrc')
-if filereadable(s:extrarc)
-    exec ':so ' . s:extrarc
+"dein Scripts-----------------------------
+if &compatible
+    set nocompatible               " Be iMproved
 endif
-" }}}
 
-" _. General {{{
-if count(g:vimified_packages, 'general')
-    Bundle 'editorconfig/editorconfig-vim'
+" Required:
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
-    Bundle 'rking/ag.vim'
-    nnoremap <leader>a :Ag -i<space>
+" Required:
+if dein#load_state('~/.vim/dein')
+    call dein#begin('~/.vim/dein')
 
-    Bundle 'matthias-guenther/hammer.vim'
-    nmap <leader>p :Hammer<cr>
+    " Let dein manage dein
+    " Required:
+    call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
 
-    Bundle 'junegunn/vim-easy-align'
-    Bundle 'tpope/vim-endwise'
-    Bundle 'tpope/vim-repeat'
-    Bundle 'tpope/vim-speeddating'
-    Bundle 'tpope/vim-surround'
-    Bundle 'tpope/vim-unimpaired'
-    Bundle 'maxbrunsfeld/vim-yankstack'
-    Bundle 'tpope/vim-eunuch'
+    " Add or remove your plugins here:
+    call dein#add('Shougo/neosnippet.vim')
+    call dein#add('Shougo/neosnippet-snippets')
 
-    Bundle 'scrooloose/nerdtree'
-    " Disable the scrollbars (NERDTree)
-    set guioptions-=r
-    set guioptions-=L
-    " Keep NERDTree window fixed between multiple toggles
-    set winfixwidth
+    " You can specify revision/branch/tag.
+    call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
 
 
-    Bundle 'kana/vim-textobj-user'
-    Bundle 'vim-scripts/YankRing.vim'
-    let g:yankring_replace_n_pkey = '<leader>['
-    let g:yankring_replace_n_nkey = '<leader>]'
-    let g:yankring_history_dir = s:dotvim.'/tmp/'
-    nmap <leader>y :YRShow<cr>
+    " PACKAGES {{{
 
-    Bundle 'michaeljsmith/vim-indent-object'
-    let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
-
-    Bundle 'Spaceghost/vim-matchit'
-    Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_working_path_mode = ''
-
-    Bundle 'vim-scripts/scratch.vim'
-
-    Bundle 'troydm/easybuffer.vim'
-    nmap <leader>be :EasyBufferToggle<cr>
-
-    Bundle 'terryma/vim-multiple-cursors'
-endif
-" }}}
-
-" _. Fancy {{{
-if count(g:vimified_packages, 'fancy')
-    "call g:Check_defined('g:airline_left_sep', '')
-    "call g:Check_defined('g:airline_right_sep', '')
-    "call g:Check_defined('g:airline_branch_prefix', '')
-
-    Bundle 'bling/vim-airline'
-endif
-" }}}
-
-" _. Indent {{{
-if count(g:vimified_packages, 'indent')
-  Bundle 'Yggdroot/indentLine'
-  set list lcs=tab:\|\
-  let g:indentLine_color_term = 111
-  let g:indentLine_color_gui = '#DADADA'
-  let g:indentLine_char = 'c'
-  "let g:indentLine_char = '∙▹¦'
-  let g:indentLine_char = '∙'
-endif
-" }}}
-
-" _. OS {{{
-if count(g:vimified_packages, 'os')
-    Bundle 'zaiste/tmux.vim'
-    Bundle 'benmills/vimux'
-    map <Leader>rp :VimuxPromptCommand<CR>
-    map <Leader>rl :VimuxRunLastCommand<CR>
-
-    map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
-endif
-" }}}
-
-" _. Coding {{{
-
-if count(g:vimified_packages, 'coding')
-    Bundle 'majutsushi/tagbar'
-    nmap <leader>t :TagbarToggle<CR>
-
-    Bundle 'gregsexton/gitv'
-
-    Bundle 'joonty/vdebug.git'
-
-    Bundle 'scrooloose/nerdcommenter'
-    nmap <leader># :call NERDComment(0, "invert")<cr>
-    vmap <leader># :call NERDComment(0, "invert")<cr>
-
-    " - Bundle 'msanders/snipmate.vim'
-    Bundle 'sjl/splice.vim'
-
-    Bundle 'tpope/vim-fugitive'
-    nmap <leader>gs :Gstatus<CR>
-    nmap <leader>gc :Gcommit -v<CR>
-    nmap <leader>gac :Gcommit --amen -v<CR>
-    nmap <leader>g :Ggrep
-    " ,f for global git search for word under the cursor (with highlight)
-    nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
-    " same in visual mode
-    :vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
-
-    Bundle 'scrooloose/syntastic'
-    let g:syntastic_enable_signs=1
-    let g:syntastic_auto_loc_list=1
-    let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby', 'python', ], 'passive_filetypes': ['html', 'css', 'slim'] }
-
-    " --
-
-    Bundle 'vim-scripts/Reindent'
-
-    autocmd FileType gitcommit set tw=68 spell
-    autocmd FileType gitcommit setlocal foldmethod=manual
-
-    " Check API docs for current word in Zeal: http://zealdocs.org/
-    nnoremap <leader>d :!zeal --query "<cword>"&<CR><CR>
-endif
-" }}}
-
-
-
-" _. Python {{{
-if count(g:vimified_packages, 'python')
-    Bundle 'klen/python-mode'
-    Bundle 'python.vim'
-    Bundle 'python_match.vim'
-    Bundle 'pythoncomplete'
-    Bundle 'jmcantrell/vim-virtualenv'
-endif
-" }}}
-
-" _. Go {{{
-if count(g:vimified_packages, 'go')
-    Bundle 'fatih/vim-go'
-    let g:go_disable_autoinstall = 1
-endif
-" }}}
-
-" _. Ruby {{{
-if count(g:vimified_packages, 'ruby')
-    Bundle 'vim-ruby/vim-ruby'
-    Bundle 'tpope/vim-rails'
-    Bundle 'nelstrom/vim-textobj-rubyblock'
-    Bundle 'ecomba/vim-ruby-refactoring'
-
-    autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
-    autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
-    autocmd User Rails set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-endif
-" }}}
-
-" _. Clang {{{
-if count(g:vimified_packages, 'clang')
-    Bundle 'Rip-Rip/clang_complete'
-    Bundle 'LucHermitte/clang_indexer'
-    Bundle 'newclear/lh-vim-lib'
-    Bundle 'LucHermitte/vim-clang'
-    Bundle 'devx/c.vim'
-endif
-" }}}
-
-" _. HTML {{{
-if count(g:vimified_packages, 'html')
-    Bundle 'tpope/vim-haml'
-    Bundle 'juvenn/mustache.vim'
-    Bundle 'tpope/vim-markdown'
-    Bundle 'digitaltoad/vim-jade'
-    Bundle 'slim-template/vim-slim'
-
-    au BufNewFile,BufReadPost *.jade setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-    au BufNewFile,BufReadPost *.html setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-    au BufNewFile,BufReadPost *.slim setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-    au BufNewFile,BufReadPost *.md set filetype=markdown
-
-    let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
-endif
-" }}}
-
-" _. CSS {{{
-if count(g:vimified_packages, 'css')
-    Bundle 'wavded/vim-stylus'
-    Bundle 'lunaru/vim-less'
-    nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
-endif
-" }}}
-
-" _. JS {{{
-if count(g:vimified_packages, 'js')
-    Bundle 'kchmck/vim-coffee-script'
-    au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-    Bundle 'alfredodeza/jacinto.vim'
-    au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
-    au BufNewFile,BufReadPost *.coffee setl tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-endif
-" }}}
-
-" _. Clojure {{{
-if count(g:vimified_packages, 'clojure')
-    Bundle 'guns/vim-clojure-static'
-    Bundle 'tpope/vim-fireplace'
-    Bundle 'tpope/vim-classpath'
-endif
-" }}}
-
-" _. Haskell {{{
-if count(g:vimified_packages, 'haskell')
-    Bundle 'Twinside/vim-syntax-haskell-cabal'
-    Bundle 'lukerandall/haskellmode-vim'
-
-    au BufEnter *.hs compiler ghc
-
-    let g:ghc = "/usr/local/bin/ghc"
-    let g:haddock_browser = "open"
-endif
-" }}}
-
-" _. Elixir {{{
-if count(g:vimified_packages, 'elixir')
-    Bundle 'elixir-lang/vim-elixir'
-endif
-" }}}
-
-" _. Rust {{{
-if count(g:vimified_packages, 'rust')
-    Bundle 'wting/rust.vim'
-endif
-" }}}
-
-" _. Elm {{{
-if count(g:vimified_packages, 'elm')
-    Bundle 'lambdatoast/elm.vim'
-endif
-" }}}
-
-" _. Color {{{
-if count(g:vimified_packages, 'color')
-    Bundle 'sjl/badwolf'
-    Bundle 'altercation/vim-colors-solarized'
-    Bundle 'tomasr/molokai'
-    Bundle 'zaiste/Atom'
-    Bundle 'w0ng/vim-hybrid'
-    Bundle 'chriskempson/base16-vim'
-    Bundle 'Elive/vim-colorscheme-elive'
-    Bundle 'zeis/vim-kolor'
-
-    " During installation the molokai colorscheme might not be avalable
-    if filereadable(globpath(&rtp, 'colors/molokai.vim'))
-      colorscheme molokai
-    else
-      colorscheme default
+    " Install user-supplied Bundles {{{
+    let s:extrarc = expand(s:dotvim . '/extra.vimrc')
+    if filereadable(s:extrarc)
+        exec ':so ' . s:extrarc
     endif
-else
-    colorscheme default
+    " }}}
+
+    " _. General {{{
+    if count(g:vimified_packages, 'general')
+        call dein#add('editorconfig/editorconfig-vim')
+
+        call dein#add('rking/ag.vim')
+        nnoremap <leader>a :Ag -i<space>
+
+        call dein#add('matthias-guenther/hammer.vim')
+        nmap <leader>p :Hammer<cr>
+
+        call dein#add('junegunn/vim-easy-align')
+        call dein#add('tpope/vim-endwise')
+        call dein#add('tpope/vim-repeat')
+        call dein#add('tpope/vim-speeddating')
+        call dein#add('tpope/vim-surround')
+        call dein#add('tpope/vim-unimpaired')
+        call dein#add('maxbrunsfeld/vim-yankstack')
+        call dein#add('tpope/vim-eunuch')
+
+        call dein#add('scrooloose/nerdtree')
+        " Disable the scrollbars (NERDTree)
+        set guioptions-=r
+        set guioptions-=L
+        " Keep NERDTree window fixed between multiple toggles
+        set winfixwidth
+
+
+        call dein#add('kana/vim-textobj-user')
+        call dein#add('vim-scripts/YankRing.vim')
+        let g:yankring_replace_n_pkey = '<leader>['
+        let g:yankring_replace_n_nkey = '<leader>]'
+        let g:yankring_history_dir = s:dotvim.'/tmp/'
+        nmap <leader>y :YRShow<cr>
+
+        call dein#add('michaeljsmith/vim-indent-object')
+        let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
+
+        call dein#add('Spaceghost/vim-matchit')
+        call dein#add('kien/ctrlp.vim')
+        let g:ctrlp_working_path_mode = ''
+
+        call dein#add('vim-scripts/scratch.vim')
+
+        call dein#add('troydm/easybuffer.vim')
+        nmap <leader>be :EasyBufferToggle<cr>
+
+        call dein#add('terryma/vim-multiple-cursors')
+    endif
+    " }}}
+
+    " _. Fancy {{{
+    if count(g:vimified_packages, 'fancy')
+        "call g:Check_defined('g:airline_left_sep', '')
+        "call g:Check_defined('g:airline_right_sep', '')
+        "call g:Check_defined('g:airline_branch_prefix', '')
+
+        call dein#add('bling/vim-airline')
+    endif
+    " }}}
+
+    " _. Indent {{{
+    if count(g:vimified_packages, 'indent')
+        call dein#add('Yggdroot/indentLine')
+        set list lcs=tab:\|\
+        let g:indentLine_color_term = 111
+        let g:indentLine_color_gui = '#DADADA'
+        let g:indentLine_char = 'c'
+        "let g:indentLine_char = '∙▹¦'
+        let g:indentLine_char = '∙'
+    endif
+    " }}}
+
+    " _. OS {{{
+    if count(g:vimified_packages, 'os')
+        call dein#add('zaiste/tmux.vim')
+        call dein#add('benmills/vimux')
+        map <Leader>rp :VimuxPromptCommand<CR>
+        map <Leader>rl :VimuxRunLastCommand<CR>
+
+        map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
+    endif
+    " }}}
+
+    " _. Coding {{{
+
+    if count(g:vimified_packages, 'coding')
+        call dein#add('majutsushi/tagbar')
+        nmap <leader>t :TagbarToggle<CR>
+
+        call dein#add('gregsexton/gitv')
+
+        call dein#add('joonty/vdebug.git')
+
+        call dein#add('scrooloose/nerdcommenter')
+        nmap <leader># :call NERDComment(0, "invert")<cr>
+        vmap <leader># :call NERDComment(0, "invert")<cr>
+
+        " - Bundle 'msanders/snipmate.vim'
+        call dein#add('sjl/splice.vim')
+
+        call dein#add('tpope/vim-fugitive')
+        nmap <leader>gs :Gstatus<CR>
+        nmap <leader>gc :Gcommit -v<CR>
+        nmap <leader>gac :Gcommit --amen -v<CR>
+        nmap <leader>g :Ggrep
+        " ,f for global git search for word under the cursor (with highlight)
+        nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
+        " same in visual mode
+        :vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+
+        call dein#add('scrooloose/syntastic')
+        let g:syntastic_enable_signs=1
+        let g:syntastic_auto_loc_list=1
+        let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby', 'python', ], 'passive_filetypes': ['html', 'css', 'slim'] }
+
+        " --
+
+        call dein#add('vim-scripts/Reindent')
+
+        autocmd FileType gitcommit set tw=68 spell
+        autocmd FileType gitcommit setlocal foldmethod=manual
+
+        " Check API docs for current word in Zeal: http://zealdocs.org/
+        nnoremap <leader>d :!zeal --query "<cword>"&<CR><CR>
+    endif
+    " }}}
+
+
+
+    " _. Python {{{
+    if count(g:vimified_packages, 'python')
+        call dein#add('klen/python-mode')
+        call dein#add('python.vim')
+        call dein#add('python_match.vim')
+        call dein#add('pythoncomplete')
+        call dein#add('jmcantrell/vim-virtualenv')
+    endif
+    " }}}
+
+    " _. Go {{{
+    if count(g:vimified_packages, 'go')
+        call dein#add('fatih/vim-go')
+        let g:go_disable_autoinstall = 1
+    endif
+    " }}}
+
+    " _. Ruby {{{
+    if count(g:vimified_packages, 'ruby')
+        call dein#add('vim-ruby/vim-ruby')
+        call dein#add('tpope/vim-rails')
+        call dein#add('nelstrom/vim-textobj-rubyblock')
+        call dein#add('ecomba/vim-ruby-refactoring')
+
+        autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
+        autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
+        autocmd User Rails set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+    endif
+    " }}}
+
+    " _. Clang {{{
+    if count(g:vimified_packages, 'clang')
+        call dein#add('Rip-Rip/clang_complete')
+        call dein#add('LucHermitte/clang_indexer')
+        call dein#add('newclear/lh-vim-lib')
+        call dein#add('LucHermitte/vim-clang')
+        call dein#add('devx/c.vim')
+    endif
+    " }}}
+
+    " _. HTML {{{
+    if count(g:vimified_packages, 'html')
+        call dein#add('tpope/vim-haml')
+        call dein#add('juvenn/mustache.vim')
+        call dein#add('tpope/vim-markdown')
+        call dein#add('digitaltoad/vim-jade')
+        call dein#add('slim-template/vim-slim')
+
+        au BufNewFile,BufReadPost *.jade setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+        au BufNewFile,BufReadPost *.html setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+        au BufNewFile,BufReadPost *.slim setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+        au BufNewFile,BufReadPost *.md set filetype=markdown
+
+        let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
+    endif
+    " }}}
+
+    " _. CSS {{{
+    if count(g:vimified_packages, 'css')
+        call dein#add('wavded/vim-stylus')
+        call dein#add('lunaru/vim-less')
+        nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
+    endif
+    " }}}
+
+    " _. JS {{{
+    if count(g:vimified_packages, 'js')
+        call dein#add('kchmck/vim-coffee-script')
+        au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+        call dein#add('alfredodeza/jacinto.vim')
+        au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+        au BufNewFile,BufReadPost *.coffee setl tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+    endif
+    " }}}
+
+    " _. Clojure {{{
+    if count(g:vimified_packages, 'clojure')
+        call dein#add('guns/vim-clojure-static')
+        call dein#add('tpope/vim-fireplace')
+        call dein#add('tpope/vim-classpath')
+    endif
+    " }}}
+
+    " _. Haskell {{{
+    if count(g:vimified_packages, 'haskell')
+        call dein#add('Twinside/vim-syntax-haskell-cabal')
+        call dein#add('lukerandall/haskellmode-vim')
+
+        au BufEnter *.hs compiler ghc
+
+        let g:ghc = "/usr/local/bin/ghc"
+        let g:haddock_browser = "open"
+    endif
+    " }}}
+
+    " _. Elixir {{{
+    if count(g:vimified_packages, 'elixir')
+        call dein#add('elixir-lang/vim-elixir')
+    endif
+    " }}}
+
+    " _. Rust {{{
+    if count(g:vimified_packages, 'rust')
+        call dein#add('wting/rust.vim')
+    endif
+    " }}}
+
+    " _. Elm {{{
+    if count(g:vimified_packages, 'elm')
+        call dein#add('lambdatoast/elm.vim')
+    endif
+    " }}}
+
+    " _. Color {{{
+    if count(g:vimified_packages, 'color')
+        call dein#add('sjl/badwolf')
+        call dein#add('altercation/vim-colors-solarized')
+        call dein#add('tomasr/molokai')
+        call dein#add('zaiste/Atom')
+        call dein#add('w0ng/vim-hybrid')
+        call dein#add('chriskempson/base16-vim')
+        call dein#add('Elive/vim-colorscheme-elive')
+        call dein#add('zeis/vim-kolor')
+
+        " During installation the molokai colorscheme might not be avalable
+        if filereadable(globpath(&rtp, 'colors/molokai.vim'))
+            colorscheme molokai
+        else
+            colorscheme default
+        endif
+    else
+        colorscheme default
+    endif
+    " }}}
+
+    " Required:
+    call dein#end()
+    call dein#save_state()
 endif
-" }}}
+
+" Required:
+filetype plugin indent on
+syntax enable
+
+"End dein Scripts-------------------------
+"
 
 " }}}
 
@@ -424,11 +452,11 @@ set ttimeoutlen=10
 
 " _ backups {{{
 if has('persistent_undo')
-  " undo files
-  exec 'set undodir='.s:dotvim.'/tmp/undo//'
-  set undofile
-  set undolevels=3000
-  set undoreload=10000
+    " undo files
+    exec 'set undodir='.s:dotvim.'/tmp/undo//'
+    set undofile
+    set undolevels=3000
+    set undoreload=10000
 endif
 " backups
 exec 'set backupdir='.s:dotvim.'/tmp/backup//'
@@ -441,13 +469,13 @@ set noswapfile
 set modelines=0
 set noeol
 if exists('+relativenumber')
-  set relativenumber
+    set relativenumber
 endif
 set numberwidth=3
 set winwidth=83
 set ruler
 if executable('zsh')
-  set shell=zsh\ -l
+    set shell=zsh\ -l
 endif
 set showcmd
 
@@ -468,7 +496,7 @@ set expandtab
 set wrap
 set formatoptions=qrn1
 if exists('+colorcolumn')
-  set colorcolumn=+1
+    set colorcolumn=+1
 endif
 set cpo+=J
 " }}}
@@ -678,3 +706,7 @@ if filereadable(s:afterrc)
     exec ':so ' . s:afterrc
 endif
 " }}}
+
+if dein#check_install()
+    call dein#install()
+endif
