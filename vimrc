@@ -9,7 +9,8 @@ set nocompatible
 filetype on
 filetype off
 
-let s:dotvim = fnamemodify(globpath(&rtp, 'vimified.dir'), ':p:h')
+" let s:dotvim = fnamemodify(globpath(&rtp, 'vimified.dir'), ':p:h')
+let s:dotvim = "/Users/matt/.vim"
 
 " Utils {{{
 exec ':so '.s:dotvim.'/functions/util.vim'
@@ -55,14 +56,6 @@ if dein#load_state('~/.vim/dein')
     " Let dein manage dein
     " Required:
     call dein#add('~/.vim/dein/repos/github.com/Shougo/dein.vim')
-
-    " Add or remove your plugins here:
-    call dein#add('Shougo/neosnippet.vim')
-    call dein#add('Shougo/neosnippet-snippets')
-
-    " You can specify revision/branch/tag.
-    call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
-
 
     " PACKAGES {{{
 
@@ -111,7 +104,7 @@ if dein#load_state('~/.vim/dein')
         let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
 
         call dein#add('Spaceghost/vim-matchit')
-        call dein#add('kien/ctrlp.vim')
+        call dein#add('ctrlpvim/ctrlp.vim')
         let g:ctrlp_working_path_mode = ''
 
         call dein#add('vim-scripts/scratch.vim')
@@ -205,9 +198,9 @@ if dein#load_state('~/.vim/dein')
     " _. Python {{{
     if count(g:vimified_packages, 'python')
         call dein#add('klen/python-mode')
-        call dein#add('python.vim')
-        call dein#add('python_match.vim')
-        call dein#add('pythoncomplete')
+        call dein#add('vim-scripts/python.vim')
+        call dein#add('vim-scripts/python_match.vim')
+        call dein#add('vim-scripts/pythoncomplete')
         call dein#add('jmcantrell/vim-virtualenv')
     endif
     " }}}
@@ -229,6 +222,7 @@ if dein#load_state('~/.vim/dein')
         autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
         autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
         autocmd User Rails set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+        au BufNewFile,BufRead *.rb set filetype=ruby
     endif
     " }}}
 
@@ -710,3 +704,10 @@ endif
 if dein#check_install()
     call dein#install()
 endif
+
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL
