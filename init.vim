@@ -1,1 +1,1 @@
-/Users/Matt/.vimrc
+/home/matt/vimified/vimrc
