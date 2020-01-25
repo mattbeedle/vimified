@@ -10,7 +10,7 @@ filetype on
 filetype off
 
 " let s:dotvim = fnamemodify(globpath(&rtp, 'vimified.dir'), ':p:h')
-let s:dotvim = "/home/matt/.vim"
+let s:dotvim = "~/.vim"
 
 " Utils {{{
 exec ':so '.s:dotvim.'/functions/util.vim'
@@ -112,7 +112,9 @@ if dein#load_state('~/.cache/dein')
         call dein#add('troydm/easybuffer.vim')
         nmap <leader>be :EasyBufferToggle<cr>
 
-        call dein#add('terryma/vim-multiple-cursors')
+        " This conflicts with deoplete
+        " https://github.com/Shougo/deoplete.nvim/issues/481#issuecomment-302039157
+        " call dein#add('terryma/vim-multiple-cursors')
     endif
     " }}}
 
@@ -265,6 +267,7 @@ if dein#load_state('~/.cache/dein')
     if count(g:vimified_packages, 'js')
         call dein#add('kchmck/vim-coffee-script')
         au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+        au BufNewFile,BufReadPost *.re setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
         call dein#add('alfredodeza/jacinto.vim')
         au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
